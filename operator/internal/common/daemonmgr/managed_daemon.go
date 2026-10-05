@@ -67,6 +67,7 @@ type BuildOptions struct {
 	RuntimeClassName   *string              // resolved RuntimeClass for daemon pods that need NVIDIA GPU/NVML access
 	DefaultImages      map[string]ImageSpec // Helm-injected default images keyed by daemon name
 	FIPSOnly           bool                 // Helm-injected: run daemon containers with FIPS-only enforcement. See FIPSOnlyEnv.
+	NRIPluginEnabled   bool                 // the GPU Operator delivers GPUs through its own NRI plugin, which deletes the nvidia RuntimeClass. See SetManagementCDIDevice.
 }
 
 // ResolveRuntimeClassName returns the RuntimeClass to set on daemon pods that
