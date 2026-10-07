@@ -365,14 +365,16 @@ func TestGpuOperatorDependencyChecker(t *testing.T) {
 			expectedMessage: "not ready: FractiondReady",
 		},
 		{
-			name:  "ClusterServiceVersion without a provider is ignored",
+			// The provider is optional, so its absence leaves the name prefix as
+			// the only available evidence and the version is gated on that alone.
+			name:  "ClusterServiceVersion without a provider is still gated",
 			input: falseReady,
 			objects: []client.Object{
-				clusterServiceVersionObjectFrom("gpu-operator-stand-in.v25.10.0", "25.10.0", ""),
+				clusterServiceVersionObjectFrom("gpu-operator-certified.v26.3.3", "26.3.3", ""),
 			},
 			expectedStatus:  metav1.ConditionFalse,
-			expectedReason:  daemonmgr.ReasonComponentNotReady,
-			expectedMessage: "not ready: FractiondReady",
+			expectedReason:  daemonmgr.ReasonGPUOperatorVersionUnsupported,
+			expectedMessage: "26.3.3",
 		},
 		{
 			// A ClusterPolicy short-circuits the ClusterServiceVersion lookup
